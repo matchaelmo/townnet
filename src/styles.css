@@ -1,0 +1,375 @@
+@import url("https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Telma&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap");
+
+:root {
+  --color-bg-hero: #fceee4;
+  --color-green: #2d6a4f;
+  --color-terracotta: #d4572a;
+  --color-navy: #1a3a5c;
+  --color-body: #1a1a1a;
+  --color-white: #ffffff;
+  --color-navy-light: #e8eef5;
+  --color-muted: #6b6b6b;
+  --color-border: #e0d5cc;
+  font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--color-body);
+  background: var(--color-bg-hero);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  background: var(--color-bg-hero);
+}
+
+button,
+a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.wordmark,
+.wordmark-link {
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1;
+}
+
+.wordmark-link {
+  width: fit-content;
+}
+
+.wordmark-text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.14em;
+  white-space: nowrap;
+}
+
+.wordmark-home {
+  color: var(--color-green);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.wordmark-nyc {
+  color: var(--color-terracotta);
+  font-family: "Telma", cursive;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+.hero-page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 32px 20px;
+  background:
+    linear-gradient(135deg, #20ba39 0%, #72cb76 35%, #f4c8ad 70%, var(--color-bg-hero) 100%);
+  text-align: center;
+}
+
+.hero-wordmark .wordmark-home {
+  color: var(--color-white);
+  font-size: 52px;
+  font-weight: 800;
+}
+
+.hero-wordmark .wordmark-nyc {
+  color: var(--color-navy);
+  font-size: 56px;
+}
+
+.hero-card {
+  width: min(100%, 480px);
+  padding: 28px 32px;
+  border-radius: 24px;
+  background: var(--color-white);
+  box-shadow: 0 24px 80px rgba(26, 58, 92, 0.14);
+  text-align: center;
+}
+
+.hero-card h1 {
+  margin: 0;
+  color: var(--color-navy);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+
+.hero-divider {
+  width: 100%;
+  height: 1px;
+  margin: 18px 0;
+  background: rgba(26, 58, 92, 0.16);
+}
+
+.hero-description {
+  margin: 0;
+  color: var(--color-body);
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  margin-top: 24px;
+}
+
+.button {
+  width: 100%;
+  height: 52px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button-primary {
+  border: 2px solid var(--color-navy);
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+.button-secondary {
+  border: 2px solid var(--color-navy);
+  background: transparent;
+  color: var(--color-navy);
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: var(--color-bg-hero);
+}
+
+.inner-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  padding: 24px;
+}
+
+.choice-page {
+  display: flex;
+  min-height: calc(100vh - 88px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px 56px;
+  text-align: center;
+}
+
+.choice-intro {
+  margin-bottom: 32px;
+}
+
+.choice-intro h1 {
+  margin: 0 0 10px;
+  color: var(--color-body);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.choice-intro p {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.choice-grid {
+  display: grid;
+  width: min(100%, 760px);
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.choice-card {
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 28px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-white);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.choice-card:hover,
+.choice-card:focus-visible {
+  border-color: var(--color-navy);
+  box-shadow: 0 16px 34px rgba(26, 58, 92, 0.08);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.choice-icon {
+  margin-bottom: 22px;
+  color: var(--color-navy);
+}
+
+.choice-card h2 {
+  margin: 0 0 8px;
+  color: var(--color-body);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.choice-card p {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.map-nudge {
+  margin: 24px 0 0;
+  color: #aaa;
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.map-nudge a {
+  color: var(--color-navy);
+  font-weight: 500;
+}
+
+.coming-soon {
+  display: flex;
+  min-height: calc(100vh - 88px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px 72px;
+  text-align: center;
+}
+
+.coming-eyebrow {
+  margin: 0 0 8px;
+  color: var(--color-terracotta);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.coming-soon h1 {
+  margin: 0 0 24px;
+  color: var(--color-body);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: clamp(40px, 10vw, 80px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 2px solid var(--color-navy);
+  border-radius: 999px;
+  color: var(--color-navy);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .hero-page {
+    gap: 24px;
+    padding: 28px 16px;
+  }
+
+  .hero-wordmark .wordmark-home {
+    font-size: 46px;
+  }
+
+  .hero-wordmark .wordmark-nyc {
+    font-size: 50px;
+  }
+
+  .hero-card {
+    padding: 24px 22px;
+  }
+}
+
+@media (min-width: 720px) {
+  .inner-header {
+    padding: 32px 40px;
+  }
+
+  .choice-page {
+    min-height: calc(100vh - 96px);
+    padding-top: 10px;
+  }
+
+  .choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
