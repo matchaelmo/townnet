@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Homefor NYC is a free, map-based web app connecting New Yorkers to city programs, nonprofits, and community services year-round."
+    />
+    <title>Homefor NYC — a home for everyone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Homefor NYC header">
+      <a class="brand" href="#top" aria-label="Homefor NYC home">
+        <span class="brand-mark">H</span>
+        <span>
+          <strong>Homefor NYC</strong>
+          <small>a home for everyone</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#search">Find help</a>
+        <a href="#serviceradar">ServiceRadar</a>
+        <a href="#partners">For nonprofits</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero section-shell">
+        <div class="hero-copy">
+          <p class="eyebrow">Year-round help across all five boroughs</p>
+          <h1>One map for every New Yorker navigating what comes next.</h1>
+          <p class="hero-text">
+            Homefor NYC connects residents, caseworkers, and community organizations to nearby food,
+            health, housing, legal, job, youth, senior, and civic services — all in one warm,
+            citywide discovery layer.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#search">Search by ZIP</a>
+            <a class="button button-secondary" href="#partners">List your program</a>
+          </div>
+          <dl class="hero-stats" aria-label="Homefor NYC coverage summary">
+            <div>
+              <dt>8</dt>
+              <dd>service categories</dd>
+            </div>
+            <div>
+              <dt>5</dt>
+              <dd>boroughs</dd>
+            </div>
+            <div>
+              <dt>40+</dt>
+              <dd>benefit checks</dd>
+            </div>
+          </dl>
+        </div>
+        <aside class="hero-card" aria-label="Featured match card">
+          <div class="pulse"></div>
+          <p class="card-label">ServiceRadar match</p>
+          <h2>“I need groceries and help with rent near 10453.”</h2>
+          <p>
+            Ranked matches combine distance, category fit, eligibility signals, and approaching
+            deadlines so residents understand why each option is recommended.
+          </p>
+          <div class="match-score">
+            <span>94%</span>
+            <small>strong fit</small>
+          </div>
+        </aside>
+      </section>
+
+      <section id="search" class="finder section-shell" aria-labelledby="finder-title">
+        <div class="section-heading">
+          <p class="eyebrow">Find nearby programs</p>
+          <h2 id="finder-title">Enter a ZIP code and need to see cards and map pins.</h2>
+        </div>
+
+        <form class="search-panel" id="search-form">
+          <label>
+            ZIP code
+            <input id="zip-input" name="zip" inputmode="numeric" maxlength="5" value="10453" />
+          </label>
+          <label>
+            What are you looking for?
+            <input
+              id="need-input"
+              name="need"
+              value="groceries, rent help, and after-school programs"
+            />
+          </label>
+          <button class="button button-primary" type="submit">Show matches</button>
+        </form>
+
+        <div class="category-chips" aria-label="Service categories">
+          <button class="chip active" data-category="all" type="button">All</button>
+          <button class="chip" data-category="food" type="button">Food</button>
+          <button class="chip" data-category="health" type="button">Health</button>
+          <button class="chip" data-category="seniors" type="button">Seniors</button>
+          <button class="chip" data-category="youth" type="button">Youth & families</button>
+          <button class="chip" data-category="jobs" type="button">Jobs & workforce</button>
+          <button class="chip" data-category="housing" type="button">Housing</button>
+          <button class="chip" data-category="legal" type="button">Legal aid</button>
+          <button class="chip" data-category="volunteer" type="button">Volunteer & civic</button>
+        </div>
+
+        <div class="results-layout">
+          <section class="results-list" aria-live="polite" aria-label="Program results">
+            <div class="results-meta">
+              <strong id="result-count">0 matches</strong>
+              <span id="result-context">near 10453</span>
+            </div>
+            <div id="cards" class="cards"></div>
+          </section>
+          <section class="map-panel" aria-label="Map preview of nearby services">
+            <div class="borough-grid" id="map-pins"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="serviceradar" class="radar section-shell" aria-labelledby="radar-title">
+        <div>
+          <p class="eyebrow">ServiceRadar AI layer</p>
+          <h2 id="radar-title">Plain-language needs become ranked, explained matches.</h2>
+          <p>
+            Residents describe their situation once. ServiceRadar scores results with eligibility,
+            proximity, urgency, and source quality, then explains the next best step in human terms.
+          </p>
+        </div>
+        <div class="radar-steps">
+          <article>
+            <span>01</span>
+            <h3>Screen</h3>
+            <p>Connect to NYC benefits screening for eligibility across 40+ public programs.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Enrich</h3>
+            <p>Add program details from city datasets, verified nonprofit listings, and partners.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Alert</h3>
+            <p>Send proactive reminders when programs open, slots change, or deadlines approach.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="partners" class="partners section-shell" aria-labelledby="partners-title">
+        <div class="section-heading">
+          <p class="eyebrow">For nonprofits and community organizations</p>
+          <h2 id="partners-title">Be found without changing how you operate.</h2>
+          <p>
+            Homefor NYC is only a discovery layer: organizations self-list, get verified, appear on
+            the map, and continue handling volunteer recruitment and program management themselves.
+          </p>
+        </div>
+        <div class="partner-grid">
+          <article>
+            <h3>Self-list</h3>
+            <p>Submit program details, hours, eligibility, languages, and service area.</p>
+          </article>
+          <article>
+            <h3>Get verified</h3>
+            <p>Source badges distinguish city agency data, partner datasets, and community listings.</p>
+          </article>
+          <article>
+            <h3>Stay current</h3>
+            <p>Update openings, deadlines, and capacity so neighbors see accurate next steps.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <strong>homefor.nyc</strong>
+      <span>Built for residents, caseworkers, and nonprofits across New York City.</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
