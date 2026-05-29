@@ -131,21 +131,6 @@ function HeroPage() {
           { className: "button button-secondary", type: "button", onClick: () => navigate("/map") },
           "View map",
         ),
-    h(Wordmark, { size: 56 }),
-    h("div", { className: "tagline-pill", id: "hero-title" }, "Find your way to a better life in New York"),
-    h("p", { className: "hero-description" }, HOMEFOR_DESCRIPTION),
-    h(
-      "div",
-      { className: "hero-actions", "aria-label": "Primary actions" },
-      h(
-        "button",
-        { className: "button button-primary", type: "button", onClick: () => navigate("/get-started") },
-        "Get started",
-      ),
-      h(
-        "button",
-        { className: "button button-secondary", type: "button", onClick: () => navigate("/map") },
-        "View map",
       ),
     ),
   );
@@ -241,7 +226,6 @@ function App() {
   return h(
     BrowserRouter,
     { basename: getRouterBasename() },
-    null,
     h(
       Routes,
       null,
