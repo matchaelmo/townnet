@@ -1,12 +1,13 @@
-# Homefor NYC
+# TownNet N.Y.C.
 
-Homefor NYC is a React UI shell for a free, map-based web app that connects New Yorkers to city programs, nonprofits, and community services across all five boroughs.
+TownNet N.Y.C. is a React UI shell for a free, map-based web app that connects New Yorkers to city programs, nonprofits, and community services across all five boroughs.
 
 ## Current routes
 
-- `/` — full-screen gradient hero with the reusable Homefor nyc wordmark, white content card, description, and primary actions.
+- `/` — full-screen gradient hero with the reusable TownNet N.Y.C. wordmark, white content card, description, and primary actions.
 - `/get-started` — audience selection page for residents, caseworkers, organizations, and volunteers.
-- `/map`, `/intake`, and `/list-org` — placeholder routes that keep navigation in React Router while future screens are designed.
+- `/map` — responsive map page shell with search, ZIP input, category filters, a map placeholder, and sample program cards.
+- `/intake` and `/list-org` — placeholder routes that keep navigation in React Router while future screens are designed.
 
 ## Run locally
 
@@ -22,8 +23,8 @@ Open <http://localhost:4173>.
 
 There is no build step right now. GitHub Pages can serve the React app directly from the repository root on the `main` branch:
 
-- `index.html` loads the React entry at `./src/main.js` and the stylesheet at `./src/styles.css` with relative paths so the project works under `https://matchaelmo.github.io/homefor/`.
-- `src/main.js` automatically uses `/homefor` as the React Router basename when hosted on GitHub Pages.
+- `index.html` loads the React entry at `./src/main.js` and the stylesheet at `./src/styles.css` with relative paths so the project works under the repository project path.
+- `src/main.js` automatically detects the repository path as the React Router basename when hosted on GitHub Pages.
 - `404.html` mirrors the app shell for direct links to client-side routes on GitHub Pages.
 - `.nojekyll` keeps GitHub Pages from applying Jekyll processing to the static files.
 

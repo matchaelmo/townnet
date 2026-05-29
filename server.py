@@ -12,5 +12,5 @@ class SpaHandler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     server = ThreadingHTTPServer(("0.0.0.0", 4173), SpaHandler)
-    print("Serving Homefor NYC at http://127.0.0.1:4173")
+    print("Serving TownNet NYC at http://127.0.0.1:4173")
     server.serve_forever()

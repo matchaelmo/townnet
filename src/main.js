@@ -10,8 +10,51 @@ import {
 
 const { createElement: h, StrictMode } = React;
 
-const HOMEFOR_DESCRIPTION =
-  "Homefor NYC connects residents, caseworkers, and community organizations to nearby food, health, housing, legal, job, youth, senior, and civic services — all in one warm, citywide discovery layer.";
+const TOWNNET_DESCRIPTION =
+  "TownNet N.Y.C. connects residents, caseworkers, and community organizations to nearby food, health, housing, legal, job, youth, senior, and civic services — all in one warm, citywide discovery layer.";
+
+const categories = [
+  "All",
+  "Food",
+  "Health",
+  "Housing",
+  "Legal aid",
+  "Jobs",
+  "Seniors",
+  "Youth & families",
+  "Volunteer & civic",
+];
+
+const samplePrograms = [
+  {
+    name: "BronxWorks Food Pantry",
+    organization: "BronxWorks",
+    category: "Food",
+    distance: "0.3 mi",
+    description: "Free groceries and hot meals, no eligibility required.",
+  },
+  {
+    name: "NYC Aging Senior Center",
+    organization: "NYC Aging",
+    category: "Seniors",
+    distance: "0.6 mi",
+    description: "Daily activities, fitness, and hot lunch for adults 60+.",
+  },
+  {
+    name: "Workforce1 Career Center",
+    organization: "Workforce1",
+    category: "Jobs",
+    distance: "1.1 mi",
+    description: "Free job placement and resume help for NYC residents.",
+  },
+  {
+    name: "Legal Aid Society",
+    organization: "The Legal Aid Society",
+    category: "Legal aid",
+    distance: "1.4 mi",
+    description: "Free legal services for low-income New Yorkers.",
+  },
+];
 
 function getRouterBasename() {
   if (window.location.hostname.endsWith("github.io")) {
@@ -89,17 +132,25 @@ function IconHeartHandshake(props) {
   );
 }
 
-function Wordmark({ size = 32, as: Component = "span", to, className = "" }) {
+function IconMapPin(props) {
+  return h(
+    TablerIcon,
+    props,
+    h("path", { d: "M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" }),
+    h("path", { d: "M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" }),
+  );
+}
+
+function Wordmark({ townSize = 34, nycSize = 38, as: Component = "span", to, className = "" }) {
   const content = h(
     "span",
-    { className: "wordmark-text", style: { fontSize: `${size}px` }, "aria-label": "Homefor nyc" },
-    h("span", { className: "wordmark-home" }, "Homefor"),
-    " ",
-    h("span", { className: "wordmark-nyc" }, "nyc"),
+    { className: "wordmark-text", "aria-label": "TownNet N.Y.C." },
+    h("span", { className: "wordmark-town", style: { fontSize: `${townSize}px` } }, "TownNet"),
+    h("span", { className: "wordmark-nyc", style: { fontSize: `${nycSize}px` } }, "N.Y.C."),
   );
 
   if (Component === Link) {
-    return h(Link, { className: `wordmark-link ${className}`.trim(), to, "aria-label": "Homefor nyc home" }, content);
+    return h(Link, { className: `wordmark-link ${className}`.trim(), to, "aria-label": "TownNet N.Y.C. home" }, content);
   }
 
   return h(Component, { className: `wordmark ${className}`.trim() }, content);
@@ -111,13 +162,13 @@ function HeroPage() {
   return h(
     "main",
     { className: "hero-page", "aria-labelledby": "hero-title" },
-    h(Wordmark, { size: 52, className: "hero-wordmark" }),
+    h(Wordmark, { townSize: 68, nycSize: 72, className: "hero-wordmark" }),
     h(
       "section",
       { className: "hero-card", "aria-labelledby": "hero-title" },
       h("h1", { id: "hero-title" }, "Find your way to a better life in New York"),
       h("div", { className: "hero-divider", "aria-hidden": "true" }),
-      h("p", { className: "hero-description" }, HOMEFOR_DESCRIPTION),
+      h("p", { className: "hero-description" }, TOWNNET_DESCRIPTION),
       h(
         "div",
         { className: "hero-actions", "aria-label": "Primary actions" },
@@ -152,7 +203,7 @@ const audienceCards = [
   {
     icon: IconBuildingCommunity,
     title: "I represent an organization",
-    description: "List your nonprofit or program on the Homefor map",
+    description: "List your nonprofit or program on the TownNet map",
     to: "/list-org",
   },
   {
@@ -163,11 +214,11 @@ const audienceCards = [
   },
 ];
 
-function AppShell({ children }) {
+function AppShell({ children, className = "" }) {
   return h(
     "div",
-    { className: "app-shell" },
-    h("header", { className: "inner-header" }, h(Wordmark, { size: 32, as: Link, to: "/" })),
+    { className: `app-shell ${className}`.trim() },
+    h("header", { className: "inner-header" }, h(Wordmark, { townSize: 34, nycSize: 38, as: Link, to: "/" })),
     children,
   );
 }
@@ -208,6 +259,75 @@ function GetStartedPage() {
   );
 }
 
+function MapPage() {
+  return h(
+    AppShell,
+    { className: "map-shell" },
+    h(
+      "main",
+      { className: "map-page", "aria-labelledby": "map-title" },
+      h(
+        "section",
+        { className: "map-controls", "aria-labelledby": "map-title" },
+        h("div", { className: "map-heading" }, h("h1", { id: "map-title" }, "Find services near you"), h("p", null, "Search city programs, nonprofits, and community services across New York City.")),
+        h(
+          "form",
+          { className: "search-bar", onSubmit: (event) => event.preventDefault() },
+          h("input", { type: "search", placeholder: "Search programs, services, or organizations…", "aria-label": "Search programs, services, or organizations" }),
+          h("input", { className: "zip-input", inputMode: "numeric", placeholder: "ZIP code", "aria-label": "ZIP code" }),
+          h("button", { type: "submit" }, "Search"),
+        ),
+        h(
+          "div",
+          { className: "category-pills", "aria-label": "Service categories" },
+          categories.map((category, index) =>
+            h(
+              "button",
+              { className: `category-pill ${index === 0 ? "is-active" : ""}`.trim(), type: "button", key: category },
+              category,
+            ),
+          ),
+        ),
+      ),
+      h(
+        "section",
+        { className: "map-layout", "aria-label": "Map and program results" },
+        h(
+          "div",
+          { className: "map-placeholder" },
+          h(IconMapPin, { size: 48, stroke: 1.6 }),
+          h("p", null, "Map coming in Phase 4 — Mapbox integration"),
+        ),
+        h(
+          "aside",
+          { className: "program-panel", "aria-label": "Sample program results" },
+          h(
+            "div",
+            { className: "program-list" },
+            samplePrograms.map((program) => h(ProgramCard, { program, key: program.name })),
+          ),
+          h("button", { className: "full-map-button", type: "button" }, "View full map"),
+        ),
+      ),
+    ),
+  );
+}
+
+function ProgramCard({ program }) {
+  return h(
+    "article",
+    { className: "program-card" },
+    h(
+      "div",
+      { className: "program-card-header" },
+      h("div", null, h("h2", null, program.name), h("p", { className: "program-org" }, program.organization)),
+      h("span", { className: "distance-badge" }, program.distance),
+    ),
+    h("span", { className: `category-badge category-${program.category.toLowerCase().replaceAll(" ", "-")}` }, program.category),
+    h("p", { className: "program-description" }, program.description),
+  );
+}
+
 function ComingSoonPage({ label }) {
   return h(
     AppShell,
@@ -231,7 +351,7 @@ function App() {
       null,
       h(Route, { path: "/", element: h(HeroPage) }),
       h(Route, { path: "/get-started", element: h(GetStartedPage) }),
-      h(Route, { path: "/map", element: h(ComingSoonPage, { label: "Map" }) }),
+      h(Route, { path: "/map", element: h(MapPage) }),
       h(Route, { path: "/intake", element: h(ComingSoonPage, { label: "Intake" }) }),
       h(Route, { path: "/list-org", element: h(ComingSoonPage, { label: "List an organization" }) }),
       h(Route, { path: "*", element: h(HeroPage) }),
