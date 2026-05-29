@@ -1,0 +1,10 @@
+{
+  "name": "townnet-nyc-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python3 server.py",
+    "check": "node --check src/main.js"
+  }
+}
