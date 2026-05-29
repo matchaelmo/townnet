@@ -13,6 +13,15 @@ const { createElement: h, StrictMode } = React;
 const HOMEFOR_DESCRIPTION =
   "Homefor NYC connects residents, caseworkers, and community organizations to nearby food, health, housing, legal, job, youth, senior, and civic services — all in one warm, citywide discovery layer.";
 
+function getRouterBasename() {
+  if (window.location.hostname.endsWith("github.io")) {
+    const [repoName] = window.location.pathname.split("/").filter(Boolean);
+    return repoName ? `/${repoName}` : "";
+  }
+
+  return "";
+}
+
 function TablerIcon({ children, className, size = 40, stroke = 1.7 }) {
   return h(
     "svg",
@@ -211,6 +220,7 @@ function ComingSoonPage({ label }) {
 function App() {
   return h(
     BrowserRouter,
+    { basename: getRouterBasename() },
     null,
     h(
       Routes,
@@ -220,6 +230,7 @@ function App() {
       h(Route, { path: "/map", element: h(ComingSoonPage, { label: "Map" }) }),
       h(Route, { path: "/intake", element: h(ComingSoonPage, { label: "Intake" }) }),
       h(Route, { path: "/list-org", element: h(ComingSoonPage, { label: "List an organization" }) }),
+      h(Route, { path: "*", element: h(HeroPage) }),
     ),
   );
 }
