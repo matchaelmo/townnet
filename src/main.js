@@ -221,6 +221,7 @@ function App() {
   return h(
     BrowserRouter,
     { basename: getRouterBasename() },
+    null,
     h(
       Routes,
       null,
