@@ -4,6 +4,7 @@ Homefor NYC is a React UI shell for a free, map-based web app that connects New 
 
 ## Current routes
 
+- `/` — full-screen gradient hero with the reusable Homefor nyc wordmark, white content card, description, and primary actions.
 - `/` — full-screen hero with the reusable Homefor nyc wordmark, tagline pill, description, and primary actions.
 - `/get-started` — audience selection page for residents, caseworkers, organizations, and volunteers.
 - `/map`, `/intake`, and `/list-org` — placeholder routes that keep navigation in React Router while future screens are designed.

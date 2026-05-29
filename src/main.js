@@ -111,6 +111,26 @@ function HeroPage() {
   return h(
     "main",
     { className: "hero-page", "aria-labelledby": "hero-title" },
+    h(Wordmark, { size: 52, className: "hero-wordmark" }),
+    h(
+      "section",
+      { className: "hero-card", "aria-labelledby": "hero-title" },
+      h("h1", { id: "hero-title" }, "Find your way to a better life in New York"),
+      h("div", { className: "hero-divider", "aria-hidden": "true" }),
+      h("p", { className: "hero-description" }, HOMEFOR_DESCRIPTION),
+      h(
+        "div",
+        { className: "hero-actions", "aria-label": "Primary actions" },
+        h(
+          "button",
+          { className: "button button-primary", type: "button", onClick: () => navigate("/get-started") },
+          "Get started",
+        ),
+        h(
+          "button",
+          { className: "button button-secondary", type: "button", onClick: () => navigate("/map") },
+          "View map",
+        ),
     h(Wordmark, { size: 56 }),
     h("div", { className: "tagline-pill", id: "hero-title" }, "Find your way to a better life in New York"),
     h("p", { className: "hero-description" }, HOMEFOR_DESCRIPTION),

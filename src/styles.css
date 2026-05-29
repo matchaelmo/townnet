@@ -1,3 +1,4 @@
+@import url("https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,400&display=swap");
 @import url("https://api.fontshare.com/v2/css?f[]=clash-grotesk@600,500,400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Telma&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap");
@@ -67,6 +68,8 @@ a {
 
 .wordmark-home {
   color: var(--color-green);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-weight: 800;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-weight: 600;
   letter-spacing: -0.035em;
@@ -86,6 +89,55 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 28px;
+  padding: 32px 20px;
+  background:
+    linear-gradient(135deg, #20ba39 0%, #72cb76 35%, #f4c8ad 70%, var(--color-bg-hero) 100%);
+  text-align: center;
+}
+
+.hero-wordmark .wordmark-home {
+  color: var(--color-white);
+  font-size: 52px;
+  font-weight: 800;
+}
+
+.hero-wordmark .wordmark-nyc {
+  color: var(--color-navy);
+  font-size: 56px;
+}
+
+.hero-card {
+  width: min(100%, 480px);
+  padding: 28px 32px;
+  border-radius: 24px;
+  background: var(--color-white);
+  box-shadow: 0 24px 80px rgba(26, 58, 92, 0.14);
+  text-align: center;
+}
+
+.hero-card h1 {
+  margin: 0;
+  color: var(--color-navy);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+
+.hero-divider {
+  width: 100%;
+  height: 1px;
+  margin: 18px 0;
+  background: rgba(26, 58, 92, 0.16);
+}
+
+.hero-description {
+  margin: 0;
+  color: var(--color-body);
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 14px;
   gap: 24px;
   padding: 32px 20px;
   background: var(--color-bg-hero);
@@ -117,6 +169,21 @@ a {
 
 .hero-actions {
   display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  margin-top: 24px;
+}
+
+.button {
+  width: 100%;
+  height: 52px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
   width: min(240px, 100%);
   flex-direction: column;
   gap: 12px;
@@ -183,6 +250,7 @@ a {
 .choice-intro h1 {
   margin: 0 0 10px;
   color: var(--color-body);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-size: 32px;
   font-weight: 600;
@@ -193,6 +261,7 @@ a {
 .choice-intro p {
   margin: 0;
   color: var(--color-muted);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-size: 16px;
   font-weight: 400;
@@ -240,6 +309,7 @@ a {
 .choice-card h2 {
   margin: 0 0 8px;
   color: var(--color-body);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-size: 18px;
   font-weight: 600;
@@ -249,6 +319,7 @@ a {
 .choice-card p {
   margin: 0;
   color: var(--color-muted);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -258,6 +329,7 @@ a {
 .map-nudge {
   margin: 24px 0 0;
   color: #aaa;
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-size: 13px;
   font-weight: 400;
@@ -283,6 +355,7 @@ a {
 .coming-eyebrow {
   margin: 0 0 8px;
   color: var(--color-terracotta);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -293,6 +366,7 @@ a {
 .coming-soon h1 {
   margin: 0 0 24px;
   color: var(--color-body);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-size: clamp(40px, 10vw, 80px);
   font-weight: 600;
@@ -309,9 +383,29 @@ a {
   border: 2px solid var(--color-navy);
   border-radius: 999px;
   color: var(--color-navy);
+  font-family: "Cabinet Grotesk", "Nunito", sans-serif;
   font-family: "Clash Grotesk", "Nunito", sans-serif;
   font-size: 15px;
   font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .hero-page {
+    gap: 24px;
+    padding: 28px 16px;
+  }
+
+  .hero-wordmark .wordmark-home {
+    font-size: 46px;
+  }
+
+  .hero-wordmark .wordmark-nyc {
+    font-size: 50px;
+  }
+
+  .hero-card {
+    padding: 24px 22px;
+  }
 }
 
 @media (min-width: 720px) {
