@@ -106,6 +106,19 @@ function IconX(props) {
   return h(TablerIcon, props, h("path", { d: "M18 6l-12 12" }), h("path", { d: "M6 6l12 12" }));
 }
 
+function IconArrowRight(props) {
+  return h(TablerIcon, props, h("path", { d: "M5 12h14" }), h("path", { d: "M13 18l6 -6" }), h("path", { d: "M13 6l6 6" }));
+}
+
+export function ScoutMascot({ size = 120, className = "" }) {
+  return h("img", {
+    className: `scout-mascot ${className}`.trim(),
+    src: "./src/assets/scout.svg",
+    alt: COPY.scout.mascotAlt,
+    style: { width: `${size}px`, height: `${size}px` },
+  });
+}
+
 function getCategoryDefinition(categoryKey) {
   return COPY.categories.find((category) => category.key === categoryKey) ?? COPY.categories[0];
 }
@@ -163,7 +176,7 @@ function HeroPage() {
     h(
       "main",
       { className: "hero-page", "aria-labelledby": "hero-title" },
-      h(Wordmark, { townSize: 64, nycSize: 68, className: "hero-wordmark" }),
+      h(Wordmark, { townSize: 72, nycSize: 78, className: "hero-wordmark" }),
       h(
         "section",
         { className: "hero-card", "aria-labelledby": "hero-title" },
@@ -191,20 +204,28 @@ function ScoutGreetingPage() {
     h(
       "main",
       { className: "scout-page", "aria-labelledby": "scout-title" },
-      h(Wordmark, { townSize: 64, nycSize: 68, className: "hero-wordmark" }),
+      h(Wordmark, { townSize: 72, nycSize: 78, className: "hero-wordmark" }),
+      h(ScoutMascot, { size: 120, className: "scout-page-mascot" }),
       h(
         "section",
         { className: "scout-card", "aria-labelledby": "scout-title" },
-        h("div", { className: "scout-icon", "aria-hidden": "true" }, COPY.scout.emoji),
+        h(ScoutMascot, { size: 100, className: "scout-card-mascot" }),
         h("h1", { id: "scout-title" }, COPY.scout.title),
         h("p", { className: "scout-prompt" }, COPY.scout.prompt),
+        h(
+          "form",
+          { className: "scout-input-bar", onSubmit: (event) => event.preventDefault() },
+          h("input", { type: "text", placeholder: COPY.scout.inputPlaceholder, "aria-label": COPY.scout.inputPlaceholder }),
+          h("button", { type: "submit", "aria-label": COPY.scout.sendAria }, h(IconArrowRight, { size: 20, stroke: 2.2 })),
+        ),
+        h("div", { className: "scout-divider" }, h("span", null, COPY.scout.divider)),
         h(
           "div",
           { className: "scout-actions" },
           h("button", { className: "button button-primary scout-button", type: "button", onClick: () => navigate("/intake") }, COPY.scout.servicesButton),
-          h("button", { className: "button button-secondary scout-button", type: "button", onClick: () => navigate("/map") }, COPY.scout.mapButton),
+          h("button", { className: "button button-secondary scout-button", type: "button", onClick: () => navigate("/map?filter=volunteer") }, COPY.scout.volunteerButton),
+          h("button", { className: "button button-green-outline scout-button", type: "button", onClick: () => navigate("/map") }, COPY.scout.mapButton),
         ),
-        h("p", { className: "scout-helper" }, COPY.scout.helper),
       ),
     ),
     h(Footer),
