@@ -5,9 +5,8 @@ TownNet N.Y.C. is a React UI shell for a free, map-based web app that connects N
 ## Current routes
 
 - `/` — full-screen gradient hero with the reusable sticker-style TownNet N.Y.C. wordmark, white content card, description, and primary actions.
-- `/get-started` — audience selection page for residents, caseworkers, organizations, and volunteers with category-colored audience cards.
-- `/map` — responsive map page shell with search, ZIP input, Tabler-icon category filters, a green-tile map placeholder, and sample program cards.
-- `/program` — sample BronxWorks Food Pantry detail page with badges, service details, and a next-step action.
+- `/get-started` — Scout greeting screen that helps residents start with services or explore the map.
+- `/map` — full-viewport map shell with a floating search/filter bar, right-side organization sidebar, grouped program cards, and a slide-in program detail panel.
 - `/list-org` — nonprofit self-listing form for verified nonprofits and community organizations.
 - `/intake` — placeholder route that keeps navigation in React Router while future screens are designed.
 

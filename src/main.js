@@ -7,72 +7,20 @@ import {
   Routes,
   useNavigate,
 } from "https://esm.sh/react-router-dom@7?deps=react@19,react-dom@19";
+import { COPY } from "./constants.js";
 
-const { createElement: h, StrictMode } = React;
+const { createElement: h, StrictMode, useState } = React;
 
-const TOWNNET_DESCRIPTION =
-  "TownNet N.Y.C. connects residents, caseworkers, and community organizations to nearby food, health, housing, legal, job, youth, senior, and civic services — all in one warm, citywide discovery layer.";
-
-const categoryDefinitions = [
-  { key: "food", label: "Food", color: "#e74c3c", icon: IconApple },
-  { key: "health", label: "Health", color: "#3498db", icon: IconHeart },
-  { key: "housing", label: "Housing", color: "#9b59b6", icon: IconHome },
-  { key: "legal", label: "Legal", color: "#e67e22", icon: IconScale },
-  { key: "jobs", label: "Jobs", color: "#f39c12", icon: IconBriefcase },
-  { key: "seniors", label: "Seniors", color: "#1abc9c", icon: IconUsers },
-  { key: "youth", label: "Youth", color: "#2ecc71", icon: IconSchool },
-  { key: "volunteer", label: "Volunteer", color: "#e91e63", icon: IconHeartHandshake },
-];
-
-const programData = [
-  {
-    name: "BronxWorks Food Pantry",
-    organization: "BronxWorks",
-    category: "Food",
-    categoryKey: "food",
-    distance: "0.3 mi",
-    borough: "Bronx",
-    description: "Free groceries and hot meals, no eligibility required.",
-    cost: "Free",
-    hours: "Mon–Fri, 9:00 AM–5:00 PM",
-    languages: "English, Spanish",
-    eligibility: "Open to all New Yorkers. No appointment required.",
-    address: "1130 Grand Concourse, Bronx, NY 10456",
-  },
-  {
-    name: "NYC Aging Senior Center",
-    organization: "NYC Aging",
-    category: "Seniors",
-    categoryKey: "seniors",
-    distance: "0.6 mi",
-    borough: "Bronx",
-    description: "Daily activities, fitness, and hot lunch for adults 60+.",
-    cost: "Free",
-  },
-  {
-    name: "Workforce1 Career Center",
-    organization: "Workforce1",
-    category: "Jobs",
-    categoryKey: "jobs",
-    distance: "1.1 mi",
-    borough: "Bronx",
-    description: "Free job placement and resume help for NYC residents.",
-    cost: "Free",
-  },
-  {
-    name: "Legal Aid Society",
-    organization: "The Legal Aid Society",
-    category: "Legal",
-    categoryKey: "legal",
-    distance: "1.4 mi",
-    borough: "Bronx",
-    description: "Free legal services for low-income New Yorkers.",
-    cost: "Free or Low-cost",
-  },
-];
-
-const nonprofitFocusAreas = categoryDefinitions.map(({ label }) => label);
-const boroughs = ["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island"];
+const categoryIconMap = {
+  food: IconApple,
+  health: IconHeart,
+  housing: IconHome,
+  legal: IconScale,
+  jobs: IconBriefcase,
+  seniors: IconUsers,
+  youth: IconSchool,
+  volunteer: IconHeartHandshake,
+};
 
 function getRouterBasename() {
   if (window.location.hostname.endsWith("github.io")) {
@@ -154,20 +102,28 @@ function IconBuildingCommunity(props) {
   return h(TablerIcon, props, h("path", { d: "M8 9l5 0" }), h("path", { d: "M8 13l5 0" }), h("path", { d: "M8 17l5 0" }), h("path", { d: "M16 21l0 -14a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v14" }), h("path", { d: "M20 21l0 -10a2 2 0 0 0 -2 -2h-2" }), h("path", { d: "M4 21l16 0" }));
 }
 
+function IconX(props) {
+  return h(TablerIcon, props, h("path", { d: "M18 6l-12 12" }), h("path", { d: "M6 6l12 12" }));
+}
+
 function getCategoryDefinition(categoryKey) {
-  return categoryDefinitions.find((category) => category.key === categoryKey) ?? categoryDefinitions[0];
+  return COPY.categories.find((category) => category.key === categoryKey) ?? COPY.categories[0];
+}
+
+function getCategoryIcon(categoryKey) {
+  return categoryIconMap[categoryKey] ?? IconMapPin;
 }
 
 function Wordmark({ townSize = 28, nycSize = 30, as: Component = "span", to, className = "" }) {
   const content = h(
     "span",
-    { className: "wordmark-text", "aria-label": "TownNet N.Y.C." },
-    h("span", { className: "wordmark-town", style: { fontSize: `${townSize}px` } }, "TownNet"),
-    h("span", { className: "wordmark-nyc", style: { fontSize: `${nycSize}px` } }, "N.Y.C."),
+    { className: "wordmark-text", "aria-label": COPY.brand.aria },
+    h("span", { className: "wordmark-town", style: { fontSize: `${townSize}px` } }, COPY.brand.town),
+    h("span", { className: "wordmark-nyc", style: { fontSize: `${nycSize}px` } }, COPY.brand.nyc),
   );
 
   if (Component === Link) {
-    return h(Link, { className: `wordmark-link ${className}`.trim(), to, "aria-label": "TownNet N.Y.C. home" }, content);
+    return h(Link, { className: `wordmark-link ${className}`.trim(), to, "aria-label": COPY.brand.homeAria }, content);
   }
 
   return h(Component, { className: `wordmark ${className}`.trim() }, content);
@@ -178,7 +134,13 @@ function Footer() {
     "footer",
     { className: "site-footer" },
     h(Wordmark, { townSize: 20, nycSize: 22, className: "footer-wordmark" }),
-    h("nav", { "aria-label": "Footer links" }, "Español · 中文 · Русский · About · Accessibility · For nonprofits"),
+    h(
+      "nav",
+      { "aria-label": "Footer links" },
+      COPY.footer.links.map((label, index) =>
+        h(React.Fragment, { key: label }, index > 0 ? " · " : "", h("a", { href: "#" }, label)),
+      ),
+    ),
   );
 }
 
@@ -205,14 +167,14 @@ function HeroPage() {
       h(
         "section",
         { className: "hero-card", "aria-labelledby": "hero-title" },
-        h("h1", { id: "hero-title" }, "Find your way to a better life in New York"),
+        h("h1", { id: "hero-title" }, COPY.hero.title),
         h("div", { className: "hero-divider", "aria-hidden": "true" }),
-        h("p", { className: "hero-description" }, TOWNNET_DESCRIPTION),
+        h("p", { className: "hero-description" }, COPY.hero.description),
         h(
           "div",
           { className: "hero-actions", "aria-label": "Primary actions" },
-          h("button", { className: "button button-primary", type: "button", onClick: () => navigate("/get-started") }, "Get started"),
-          h("button", { className: "button button-secondary", type: "button", onClick: () => navigate("/map") }, "View map"),
+          h("button", { className: "button button-primary", type: "button", onClick: () => navigate("/get-started") }, COPY.hero.getStarted),
+          h("button", { className: "button button-secondary", type: "button", onClick: () => navigate("/map") }, COPY.hero.viewMap),
         ),
       ),
     ),
@@ -220,100 +182,104 @@ function HeroPage() {
   );
 }
 
-const audienceCards = [
-  {
-    icon: IconHome,
-    className: "resident-card",
-    title: "I need services",
-    description: "Find food, health, housing, jobs, and more near you",
-    to: "/intake",
-  },
-  {
-    icon: IconUsers,
-    className: "caseworker-card",
-    title: "I support someone",
-    description: "Help a resident, client, or family member find what they need",
-    to: "/intake?mode=caseworker",
-  },
-  {
-    icon: IconBuildingCommunity,
-    className: "organization-card",
-    title: "I represent an organization",
-    description: "List your nonprofit or program on the TownNet map",
-    to: "/list-org",
-  },
-  {
-    icon: IconHeartHandshake,
-    className: "volunteer-card",
-    title: "I want to volunteer",
-    description: "Discover local nonprofits looking for people like you",
-    to: "/map?filter=volunteer",
-  },
-];
+function ScoutGreetingPage() {
+  const navigate = useNavigate();
 
-function GetStartedPage() {
   return h(
-    PageShell,
-    null,
+    "div",
+    { className: "page-shell scout-shell" },
     h(
       "main",
-      { className: "choice-page", "aria-labelledby": "choice-title" },
-      h("section", { className: "choice-intro" }, h("h1", { id: "choice-title" }, "Who are you today?"), h("p", null, "Choose what brings you here — we'll guide you from there.")),
+      { className: "scout-page", "aria-labelledby": "scout-title" },
+      h(Wordmark, { townSize: 64, nycSize: 68, className: "hero-wordmark" }),
       h(
         "section",
-        { className: "choice-grid", "aria-label": "Choose what brings you here" },
-        audienceCards.map(({ icon: Icon, className, title, description, to }) =>
-          h(Link, { className: `choice-card ${className}`, to, key: title }, h(Icon, { className: "choice-icon", size: 40, stroke: 1.7 }), h("h2", null, title), h("p", null, description)),
+        { className: "scout-card", "aria-labelledby": "scout-title" },
+        h("div", { className: "scout-icon", "aria-hidden": "true" }, COPY.scout.emoji),
+        h("h1", { id: "scout-title" }, COPY.scout.title),
+        h("p", { className: "scout-prompt" }, COPY.scout.prompt),
+        h(
+          "div",
+          { className: "scout-actions" },
+          h("button", { className: "button button-primary scout-button", type: "button", onClick: () => navigate("/intake") }, COPY.scout.servicesButton),
+          h("button", { className: "button button-secondary scout-button", type: "button", onClick: () => navigate("/map") }, COPY.scout.mapButton),
         ),
+        h("p", { className: "scout-helper" }, COPY.scout.helper),
       ),
-      h("p", { className: "map-nudge" }, "Not sure? Start with the map ", h(Link, { to: "/map", "aria-label": "Start with the map" }, "→")),
     ),
+    h(Footer),
   );
 }
 
 function MapPage() {
+  const [selectedProgram, setSelectedProgram] = useState(null);
+  const groupedPrograms = groupProgramsByOrganization(COPY.programs);
+
   return h(
-    PageShell,
-    { className: "map-shell" },
+    "div",
+    { className: "map-viewport-shell" },
     h(
       "main",
-      { className: "map-page", "aria-labelledby": "map-title" },
+      { className: "map-viewport", "aria-labelledby": "map-title" },
       h(
         "section",
-        { className: "map-controls", "aria-labelledby": "map-title" },
-        h("div", { className: "map-heading" }, h("h1", { id: "map-title" }, "Find services near you"), h("p", null, "Search city programs, nonprofits, and community services across New York City.")),
+        { className: "map-floating-bar", "aria-labelledby": "map-title" },
+        h("div", { className: "map-brand-row" }, h(Wordmark, { townSize: 28, nycSize: 30, as: Link, to: "/" }), h("h1", { id: "map-title" }, COPY.map.title)),
         h(
           "form",
           { className: "search-bar", onSubmit: (event) => event.preventDefault() },
-          h("input", { type: "search", placeholder: "Search programs, services, or organizations…", "aria-label": "Search programs, services, or organizations" }),
-          h("input", { className: "zip-input", inputMode: "numeric", placeholder: "ZIP code", "aria-label": "ZIP code" }),
-          h("button", { type: "submit" }, "Search"),
+          h("input", { type: "search", placeholder: COPY.map.searchPlaceholder, "aria-label": COPY.map.searchPlaceholder }),
+          h("input", { className: "zip-input", inputMode: "numeric", placeholder: COPY.map.zipPlaceholder, "aria-label": COPY.map.zipPlaceholder }),
+          h("button", { type: "submit" }, COPY.map.searchButton),
         ),
         h(
           "div",
-          { className: "category-pills", "aria-label": "Service categories" },
-          categoryDefinitions.map(({ key, label, color, icon: Icon }) =>
-            h("button", { className: "category-pill", style: { "--category-color": color }, type: "button", key }, h(Icon, { size: 18 }), label),
+          { className: "category-pills", "aria-label": COPY.map.categoryAria },
+          COPY.categories.map(({ key, label, color }, index) => {
+            const Icon = getCategoryIcon(key);
+            return h("button", { className: `category-pill ${index === 0 ? "is-active" : ""}`.trim(), style: { "--category-color": color }, type: "button", key }, h(Icon, { size: 18 }), label);
+          }),
+        ),
+      ),
+      h("div", { className: "map-canvas", "aria-label": COPY.map.mapResultsAria }, h(IconMapPin, { size: 56, stroke: 1.6 }), h("p", null, COPY.map.mapPlaceholder)),
+      h(
+        "aside",
+        { className: "map-sidebar", "aria-label": COPY.map.sidebarAria },
+        h(
+          "div",
+          { className: "sidebar-scroll" },
+          groupedPrograms.map(({ organization, verified, programs }) =>
+            h(
+              "section",
+              { className: "organization-group", key: organization },
+              h("div", { className: "organization-header" }, h("h2", null, organization), verified ? h("span", { className: "verified-badge" }, COPY.map.verified) : null),
+              programs.map((program) => h(ProgramCard, { program, key: program.id, onSelect: setSelectedProgram })),
+            ),
           ),
         ),
       ),
-      h(
-        "section",
-        { className: "map-layout", "aria-label": "Map and program results" },
-        h("div", { className: "map-placeholder" }, h(IconMapPin, { size: 54, stroke: 1.6 }), h("p", null, "Map coming in Phase 4 — Mapbox integration")),
-        h(
-          "aside",
-          { className: "program-panel", "aria-label": "Sample program results" },
-          h("div", { className: "program-list" }, programData.map((program) => h(ProgramCard, { program, key: program.name }))),
-        ),
-      ),
+      h(ProgramDetailOverlay, { program: selectedProgram, onClose: () => setSelectedProgram(null) }),
     ),
+    h(Footer),
   );
+}
+
+function groupProgramsByOrganization(programs) {
+  const groups = [];
+  programs.forEach((program) => {
+    let group = groups.find((item) => item.organization === program.organization);
+    if (!group) {
+      group = { organization: program.organization, verified: program.organizationVerified, programs: [] };
+      groups.push(group);
+    }
+    group.programs.push(program);
+  });
+  return groups;
 }
 
 function CategoryBadge({ program }) {
   const category = getCategoryDefinition(program.categoryKey);
-  const Icon = category.icon;
+  const Icon = getCategoryIcon(program.categoryKey);
 
   return h(
     "span",
@@ -323,57 +289,49 @@ function CategoryBadge({ program }) {
   );
 }
 
-function ProgramCard({ program }) {
+function ProgramCard({ program, onSelect }) {
   return h(
     "article",
     { className: "program-card" },
-    h("div", { className: "program-card-header" }, h("div", null, h("h2", null, program.name), h("p", { className: "program-org" }, program.organization)), h("span", { className: "distance-badge" }, program.distance)),
+    h("div", { className: "program-card-header" }, h("div", null, h("h3", null, program.name), h("p", { className: "program-card-full-name" }, program.fullName)), h("span", { className: "distance-badge" }, program.distance)),
     h(CategoryBadge, { program }),
     h("p", { className: "program-description" }, program.description),
-    h(Link, { className: "next-step-button", to: "/program" }, "Take the next step"),
+    h("button", { className: "next-step-button", type: "button", onClick: () => onSelect(program) }, COPY.map.nextStep),
   );
 }
 
-function ProgramDetailPage() {
-  const program = programData[0];
+function ProgramDetailOverlay({ program, onClose }) {
+  const activeProgram = program ?? COPY.programs[0];
 
   return h(
-    PageShell,
-    { className: "program-shell", homeTo: "/map" },
+    "section",
+    { className: `program-detail-overlay ${program ? "is-open" : ""}`.trim(), "aria-hidden": program ? "false" : "true", "aria-labelledby": "program-detail-title" },
+    h("button", { className: "close-detail-button", type: "button", onClick: onClose, "aria-label": COPY.map.closeDetail }, h(IconX, { size: 22 })),
+    h("h2", { id: "program-detail-title" }, activeProgram.fullName),
+    h("p", { className: "detail-org" }, activeProgram.organization),
     h(
-      "main",
-      { className: "detail-page", "aria-labelledby": "program-title" },
-      h(
-        "article",
-        { className: "detail-card" },
-        h("h1", { id: "program-title" }, program.name),
-        h("p", { className: "detail-org" }, program.organization),
-        h(
-          "div",
-          { className: "detail-badges", "aria-label": "Program summary" },
-          h(CategoryBadge, { program }),
-          h("span", { className: "detail-badge" }, program.cost),
-          h("span", { className: "detail-badge" }, program.distance),
-          h("span", { className: "detail-badge" }, program.borough),
-        ),
-        h("div", { className: "detail-divider", "aria-hidden": "true" }),
-        h("p", { className: "detail-description" }, program.description),
-        h(
-          "section",
-          { className: "detail-rows", "aria-label": "Program details" },
-          h(DetailRow, { icon: IconClock, label: "Hours", text: program.hours }),
-          h(DetailRow, { icon: IconLanguage, label: "Languages", text: program.languages }),
-          h(DetailRow, { icon: IconChecklist, label: "Eligibility", text: program.eligibility }),
-          h(DetailRow, { icon: IconMapPin, label: "Address", text: program.address }),
-        ),
-        h("button", { className: "detail-next-button", type: "button" }, "Take the next step"),
-      ),
+      "div",
+      { className: "detail-badges", "aria-label": COPY.detail.summaryAria },
+      h(CategoryBadge, { program: activeProgram }),
+      h("span", { className: "detail-badge" }, activeProgram.cost),
+      h("span", { className: "detail-badge" }, activeProgram.distance),
     ),
+    h("div", { className: "detail-divider", "aria-hidden": "true" }),
+    h("p", { className: "detail-description" }, activeProgram.description),
+    h(
+      "section",
+      { className: "detail-rows", "aria-label": COPY.detail.detailsAria },
+      h(DetailRow, { icon: IconClock, label: COPY.detail.rows.hours, text: activeProgram.hours }),
+      h(DetailRow, { icon: IconLanguage, label: COPY.detail.rows.languages, text: activeProgram.languages }),
+      h(DetailRow, { icon: IconChecklist, label: COPY.detail.rows.eligibility, text: activeProgram.eligibility }),
+      h(DetailRow, { icon: IconMapPin, label: COPY.detail.rows.address, text: activeProgram.address }),
+    ),
+    h("button", { className: "detail-next-button", type: "button" }, COPY.map.nextStep),
   );
 }
 
 function DetailRow({ icon: Icon, label, text }) {
-  return h("div", { className: "detail-row" }, h(Icon, { size: 22 }), h("div", null, h("h2", null, label), h("p", null, text)));
+  return h("div", { className: "detail-row" }, h(Icon, { size: 22 }), h("div", null, h("h3", null, label), h("p", null, text)));
 }
 
 function ListOrgPage() {
@@ -386,22 +344,22 @@ function ListOrgPage() {
       h(
         "section",
         { className: "form-card" },
-        h("h1", { id: "list-title" }, "Add your organization"),
-        h("p", { className: "form-subtitle" }, "Free for all verified nonprofits and community organizations"),
+        h("h1", { id: "list-title" }, COPY.listOrg.title),
+        h("p", { className: "form-subtitle" }, COPY.listOrg.subtitle),
         h(
           "form",
           { className: "org-form", onSubmit: (event) => event.preventDefault() },
-          h(FormField, { id: "organization-name", label: "Organization name" }),
-          h(FormField, { id: "mission", label: "Mission", type: "textarea", rows: 3 }),
-          h(CheckboxGroup, { legend: "Focus areas", name: "focus", options: nonprofitFocusAreas }),
-          h(CheckboxGroup, { legend: "Boroughs served", name: "boroughs", options: boroughs }),
-          h(FormField, { id: "languages", label: "Languages offered" }),
-          h(FormField, { id: "hours", label: "Hours" }),
-          h(FormField, { id: "website", label: "Website", type: "url" }),
-          h(FormField, { id: "contact-email", label: "Contact email", type: "email" }),
-          h(FormField, { id: "phone", label: "Phone number", type: "tel" }),
-          h("button", { className: "submit-review-button", type: "submit" }, "Submit for review"),
-          h("p", { className: "review-note" }, "We verify 501(c)(3) status or city contract before listing. Usually reviewed within 3 business days."),
+          h(FormField, { id: "organization-name", label: COPY.listOrg.fields.organizationName }),
+          h(FormField, { id: "mission", label: COPY.listOrg.fields.mission, type: "textarea", rows: 3 }),
+          h(CheckboxGroup, { legend: COPY.listOrg.fields.focusAreas, name: "focus", options: COPY.categories.map(({ label }) => label) }),
+          h(CheckboxGroup, { legend: COPY.listOrg.fields.boroughsServed, name: "boroughs", options: COPY.listOrg.boroughs }),
+          h(FormField, { id: "languages", label: COPY.listOrg.fields.languagesOffered }),
+          h(FormField, { id: "hours", label: COPY.listOrg.fields.hours }),
+          h(FormField, { id: "website", label: COPY.listOrg.fields.website, type: "url" }),
+          h(FormField, { id: "contact-email", label: COPY.listOrg.fields.contactEmail, type: "email" }),
+          h(FormField, { id: "phone", label: COPY.listOrg.fields.phoneNumber, type: "tel" }),
+          h("button", { className: "submit-review-button", type: "submit" }, COPY.listOrg.submit),
+          h("p", { className: "review-note" }, COPY.listOrg.reviewNote),
         ),
       ),
     ),
@@ -427,16 +385,16 @@ function CheckboxGroup({ legend, name, options }) {
   );
 }
 
-function ComingSoonPage({ label }) {
+function ComingSoonPage() {
   return h(
     PageShell,
     null,
     h(
       "main",
       { className: "coming-soon", "aria-labelledby": "coming-soon-title" },
-      h("p", { className: "coming-eyebrow" }, label),
-      h("h1", { id: "coming-soon-title" }, "coming soon"),
-      h(Link, { className: "back-link", to: "/get-started" }, "Back to get started"),
+      h("p", { className: "coming-eyebrow" }, COPY.comingSoon.intake),
+      h("h1", { id: "coming-soon-title" }, COPY.comingSoon.title),
+      h(Link, { className: "back-link", to: "/get-started" }, COPY.comingSoon.back),
     ),
   );
 }
@@ -449,10 +407,9 @@ function App() {
       Routes,
       null,
       h(Route, { path: "/", element: h(HeroPage) }),
-      h(Route, { path: "/get-started", element: h(GetStartedPage) }),
+      h(Route, { path: "/get-started", element: h(ScoutGreetingPage) }),
       h(Route, { path: "/map", element: h(MapPage) }),
-      h(Route, { path: "/program", element: h(ProgramDetailPage) }),
-      h(Route, { path: "/intake", element: h(ComingSoonPage, { label: "Intake" }) }),
+      h(Route, { path: "/intake", element: h(ComingSoonPage) }),
       h(Route, { path: "/list-org", element: h(ListOrgPage) }),
       h(Route, { path: "*", element: h(HeroPage) }),
     ),
