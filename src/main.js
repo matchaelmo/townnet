@@ -197,6 +197,14 @@ function HeroPage() {
 
 function ScoutGreetingPage() {
   const navigate = useNavigate();
+  const [scoutQuery, setScoutQuery] = useState("");
+  const submitScoutQuery = (event) => {
+    event.preventDefault();
+    const query = scoutQuery.trim();
+    if (query) {
+      navigate(`/intake?q=${encodeURIComponent(query)}`);
+    }
+  };
 
   return h(
     "div",
@@ -214,8 +222,8 @@ function ScoutGreetingPage() {
         h("p", { className: "scout-prompt" }, COPY.scout.prompt),
         h(
           "form",
-          { className: "scout-input-bar", onSubmit: (event) => event.preventDefault() },
-          h("input", { type: "text", placeholder: COPY.scout.inputPlaceholder, "aria-label": COPY.scout.inputPlaceholder }),
+          { className: "scout-input-bar", onSubmit: submitScoutQuery },
+          h("input", { type: "text", value: scoutQuery, onChange: (event) => setScoutQuery(event.target.value), placeholder: COPY.scout.inputPlaceholder, "aria-label": COPY.scout.inputPlaceholder }),
           h("button", { type: "submit", "aria-label": COPY.scout.sendAria }, h(IconArrowRight, { size: 20, stroke: 2.2 })),
         ),
         h("div", { className: "scout-divider" }, h("span", null, COPY.scout.divider)),
@@ -355,6 +363,127 @@ function DetailRow({ icon: Icon, label, text }) {
   return h("div", { className: "detail-row" }, h(Icon, { size: 22 }), h("div", null, h("h3", null, label), h("p", null, text)));
 }
 
+function createInitialIntakeState(flow, prefilledNeed) {
+  if (prefilledNeed) {
+    return {
+      stepIndex: 3,
+      messages: [
+        { sender: "user", text: prefilledNeed },
+        { sender: "scout", text: flow.steps[3] },
+      ],
+      showResults: false,
+      isLoading: false,
+    };
+  }
+
+  return {
+    stepIndex: 0,
+    messages: [{ sender: "scout", text: flow.steps[0] }],
+    showResults: false,
+    isLoading: false,
+  };
+}
+
+function IntakePage() {
+  const params = new URLSearchParams(window.location.search);
+  const isVolunteer = params.get("mode") === "volunteer";
+  const prefilledNeed = isVolunteer ? "" : params.get("q") ?? "";
+  const flow = isVolunteer ? COPY.intake.modes.volunteer : COPY.intake.modes.default;
+  const [conversation, setConversation] = useState(() => createInitialIntakeState(flow, prefilledNeed));
+  const [draft, setDraft] = useState("");
+
+  const completeConversation = (messages) => {
+    const loadingMessage = { sender: "scout", text: flow.loading, loading: true };
+    setConversation({ stepIndex: flow.steps.length, messages: [...messages, loadingMessage], showResults: false, isLoading: true });
+    window.setTimeout(() => {
+      setConversation({ stepIndex: flow.steps.length, messages: [...messages, loadingMessage], showResults: true, isLoading: false });
+    }, 1500);
+  };
+
+  const submitAnswer = (answer) => {
+    const trimmed = answer.trim();
+    if (!trimmed || conversation.isLoading || conversation.showResults) {
+      return;
+    }
+
+    const nextMessages = [...conversation.messages, { sender: "user", text: trimmed }];
+    const nextStepIndex = conversation.stepIndex + 1;
+    setDraft("");
+
+    if (nextStepIndex >= flow.steps.length) {
+      completeConversation(nextMessages);
+      return;
+    }
+
+    setConversation({ ...conversation, stepIndex: nextStepIndex, messages: [...nextMessages, { sender: "scout", text: flow.steps[nextStepIndex] }] });
+  };
+
+  const resetConversation = () => {
+    setDraft("");
+    setConversation(createInitialIntakeState(flow, ""));
+  };
+
+  return h(
+    PageShell,
+    { className: "intake-shell" },
+    h(
+      "main",
+      { className: "intake-page", "aria-labelledby": "intake-title" },
+      h(
+        "section",
+        { className: "chat-card", "aria-labelledby": "intake-title" },
+        h("h1", { id: "intake-title", className: "visually-hidden" }, flow.resultsHeading),
+        h(
+          "div",
+          { className: "chat-messages", "aria-live": "polite" },
+          conversation.messages.map((message, index) => h(ChatMessage, { message, key: `${message.sender}-${index}` })),
+        ),
+        !conversation.showResults && h(
+          "form",
+          { className: "chat-input-bar", onSubmit: (event) => { event.preventDefault(); submitAnswer(draft); } },
+          h("input", { type: "text", value: draft, onChange: (event) => setDraft(event.target.value), placeholder: COPY.intake.inputPlaceholder, "aria-label": COPY.intake.inputPlaceholder, disabled: conversation.isLoading }),
+          h("button", { type: "submit", "aria-label": COPY.intake.sendAria, disabled: conversation.isLoading }, h(IconArrowRight, { size: 20, stroke: 2.2 })),
+          conversation.stepIndex === 1 && h("button", { className: "chat-skip-button", type: "button", onClick: () => submitAnswer(flow.skipLabel), disabled: conversation.isLoading }, flow.skipLabel),
+          conversation.stepIndex === 3 && h("button", { className: "chat-skip-button", type: "button", onClick: () => submitAnswer(flow.languageSkipLabel), disabled: conversation.isLoading }, flow.languageSkipLabel),
+        ),
+        conversation.showResults && h(IntakeResults, { flow, onReset: resetConversation }),
+      ),
+    ),
+  );
+}
+
+function ChatMessage({ message }) {
+  const isScout = message.sender === "scout";
+  return h(
+    "div",
+    { className: `chat-message ${isScout ? "from-scout" : "from-user"}` },
+    isScout ? h(ScoutMascot, { size: 60, className: "chat-avatar" }) : null,
+    h("div", { className: "chat-bubble" }, message.text, message.loading ? h("span", { className: "loading-dots", "aria-hidden": "true" }, h("span"), h("span"), h("span")) : null),
+  );
+}
+
+function IntakeResults({ flow, onReset }) {
+  return h(
+    "section",
+    { className: "intake-results", "aria-labelledby": "intake-results-title" },
+    h("h2", { id: "intake-results-title" }, flow.resultsHeading),
+    h("div", { className: "result-list" }, flow.results.map((result) => h(ResultCard, { result, buttonLabel: flow.resultButton, key: result.name }))),
+    h("p", { className: "reset-intake" }, flow.resetPrefix, h("button", { type: "button", onClick: onReset }, flow.resetLink)),
+  );
+}
+
+function ResultCard({ result, buttonLabel }) {
+  return h(
+    "article",
+    { className: "result-card" },
+    h("div", { className: "result-card-top" }, h(CategoryBadge, { program: result }), h("span", { className: "distance-badge" }, result.distance)),
+    h("h3", null, result.name),
+    h("p", { className: "result-org" }, result.organization),
+    h("p", { className: "result-why" }, result.why),
+    h("button", { className: "next-step-button", type: "button" }, buttonLabel),
+  );
+}
+
 function ListOrgPage() {
   return h(
     PageShell,
@@ -430,7 +559,7 @@ function App() {
       h(Route, { path: "/", element: h(HeroPage) }),
       h(Route, { path: "/get-started", element: h(ScoutGreetingPage) }),
       h(Route, { path: "/map", element: h(MapPage) }),
-      h(Route, { path: "/intake", element: h(ComingSoonPage) }),
+      h(Route, { path: "/intake", element: h(IntakePage) }),
       h(Route, { path: "/list-org", element: h(ListOrgPage) }),
       h(Route, { path: "*", element: h(HeroPage) }),
     ),
